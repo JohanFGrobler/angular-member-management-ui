@@ -185,6 +185,8 @@ export class MembersComponent implements OnInit {
   }
 
   handleSportSelect = (value: string): void => {
+    if (!value || value === '') return
+
     let tempNewMember = this.newMember;
     let tempSports = this.newMember.sports;
 

@@ -24,6 +24,20 @@ export class MemberComponent implements OnInit {
     photo: '',
     sports: []
   }
+  tempSelectedMember: Member = {
+    _id: '',
+    firstName: '',
+    lastName: '',
+    photo: '',
+    sports: []
+  }
+  modalOpen: boolean = false
+  sportsAvailable: Array<string> = [
+    '',
+    'Football',
+    'Squash',
+    'Tennis'
+  ]
 
   constructor(private route: ActivatedRoute, private router: Router) {
   }
@@ -41,9 +55,51 @@ export class MemberComponent implements OnInit {
     const tempIndex = tempMembers.findIndex(member => member._id === id);
 
     this.selectedMember = tempMembers[tempIndex] as unknown as Member
+    this.tempSelectedMember = tempMembers[tempIndex] as unknown as Member
+  }
+
+  handleMemberUpdate = () => {
+    let tempSelectedMember = this.selectedMember;
+    const tempMembers: Member[] = JSON.parse(localStorage.getItem("members") || "[]");
+    const tempIndex = tempMembers.findIndex(member => member._id === tempSelectedMember?._id);
+
+    if (tempSelectedMember) {
+      tempMembers[tempIndex] = tempSelectedMember;
+    }
+
+    localStorage.setItem("members", JSON.stringify(tempMembers));
+    this.selectedMember = tempSelectedMember
+    this.modalOpen = false
   }
 
   handleBackClick = () => {
     this.router.navigateByUrl('')
+  }
+
+  handleSportSelect = (value: string): void => {
+    if (!value || value === '') return
+
+    let tempNewMember = this.selectedMember;
+    let tempSports = this.selectedMember.sports;
+
+    tempSports.push(value);
+    tempNewMember = {...tempNewMember, sports: tempSports} as unknown as Member;
+
+    this.selectedMember = tempNewMember
+  }
+
+  handleSportDeSelect = (value: string): void => {
+    let tempNewMember = this.selectedMember;
+    let tempNewMemberSports = this.selectedMember.sports;
+
+    const index = tempNewMemberSports.indexOf(value);
+
+    if (index >= 0) {
+      tempNewMemberSports.splice(index, 1);
+    }
+
+    tempNewMember = {...tempNewMember, sports: tempNewMemberSports} as unknown as Member;
+
+    this.selectedMember = tempNewMember
   }
 }
