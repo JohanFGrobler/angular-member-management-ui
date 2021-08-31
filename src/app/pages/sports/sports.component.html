@@ -1,0 +1,29 @@
+<div id='sports'>
+  <div class='sports'>
+    <!--HEADER BAR-->
+    <div class='header-bar'>
+      <!--HEADER-->
+      <h5>
+        Sports
+      </h5>
+    </div>
+
+    <!--CARDS-->
+    <div
+      class='card'
+      *ngFor="let sport of sports; let index = index"
+    >
+      <div
+        class='card__image'
+        [ngStyle]="{'backgroundImage': 'url(' + sport.photo + ')'}"
+      >
+      </div>
+
+      <div class='card__content'>
+        <h5 class='card__title'>
+          {{sport.name}}
+        </h5>
+      </div>
+    </div>
+  </div>
+</div>

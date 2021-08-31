@@ -1,0 +1,180 @@
+<div id="members">
+  <div class="members">
+    <!--HEADER BAR-->
+    <div class='header-bar'>
+      <!--HEADER-->
+      <h5>
+        Members
+      </h5>
+
+      <!--CREATE MEMBER-->
+      <button
+        class='button button__new-member'
+        (click)="modalOpen = true"
+      >
+        +New Member
+      </button>
+    </div>
+
+    <!--CARDS-->
+    <div
+      class="card"
+      *ngFor="let member of members; let index = index"
+      (click)="handleCardClick(member._id)"
+    >
+      <!--PHOTO-->
+      <div
+        class='card__image'
+        [ngStyle]="{'backgroundImage': 'url(' + member.photo + ')'}"
+      ></div>
+
+      <!--CONTENT-->
+      <div class='card__content'>
+        <!--TITLE-->
+        <h5 class='card__title'>
+          {{member.firstName}} {{member.lastName}}
+        </h5>
+
+        <!--DELETE ICON-->
+        <i
+          class='icon icon__delete'
+          (click)="$event.preventDefault(); $event.stopPropagation(); handleMemberRemove(index)"
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 24" width="24px" fill="#000000"><path d="M0 0h24v24H0V0z" fill="none"/><path d="M16 9v10H8V9h8m-1.5-6h-5l-1 1H5v2h14V4h-3.5l-1-1zM18 7H6v12c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7z"/></svg>
+        </i>
+      </div>
+    </div>
+
+    <!--MODAL-->
+    <div
+      class="modal modal__backdrop"
+      *ngIf="modalOpen === true"
+      (click)="modalOpen = false"
+    >
+      <div
+        class="modal modal__wrapper"
+        (click)="$event.stopPropagation(); $event.preventDefault()"
+      >
+        <!--HEADER-->
+        <h6>Create a new member</h6>
+
+        <!--FIRST NAME-->
+        <div class='field'>
+          <label>
+            First name
+            <span
+              class='indicator'
+              *ngIf="newMember.firstName === ''"
+            >
+              *
+            </span>
+          </label>
+          <input
+            class='input'
+            type='text'
+            name='First name'
+            placeholder='John'
+            value="{{newMember?.firstName}}"
+            #firstNameInput
+            (change)="newMember.firstName = firstNameInput.value"
+          />
+        </div>
+
+        <!--LAST NAME-->
+        <div class='field'>
+          <label>
+            Last name
+            <span
+              class='indicator'
+              *ngIf="newMember.lastName === ''"
+            >
+              *
+            </span>
+          </label>
+          <input
+            class='input'
+            type='text'
+            name='Last name'
+            placeholder='Doe'
+            value="{{newMember?.lastName}}"
+            #lastNameInput
+            (change)="newMember.lastName = lastNameInput.value"
+          />
+        </div>
+
+        <!--SPORTS-->
+        <div class='field'>
+          <label>
+            Active sports ({{newMember.sports.length}})
+            <span
+              class='indicator'
+              *ngIf="newMember.lastName === ''"
+            >
+              *
+            </span>
+          </label>
+
+          <!--SPORT-->
+          <div
+            class="selected-sport"
+            *ngFor="let sport of newMember.sports;"
+          >
+            <!--SELECTED SPORTS-->
+            <p
+              class='selected-sport-text'
+            >
+              {{sport.charAt(0)
+              .toUpperCase() + sport.slice(1)}}
+            </p>
+
+            <!--REMOVE ICON-->
+            <i
+              class="icon icon__close"
+              (click)="handleSportDeSelect(sport)"
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 24" width="24px" fill="#000000">
+                <path d="M0 0h24v24H0V0z" fill="none"/>
+                <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41z"/>
+              </svg>
+            </i>
+          </div>
+
+          <!--SELECT SPORTS-->
+          <select
+            class="input"
+            #sportSelect
+            (change)="handleSportSelect(sportSelect.value)"
+          >
+            <option
+              [disabled]="newMember?.sports?.includes(sportAvailable.toLowerCase())"
+              *ngFor="let sportAvailable of sportsAvailable"
+              value="{{sportAvailable.toLowerCase()}}"
+            >
+              {{sportAvailable}}
+            </option>
+          </select>
+        </div>
+
+        <!--ACTIONS-->
+        <div class='actions-wrapper'>
+          <!--SAVE-->
+          <button
+            class="{{newMember.firstName === '' || newMember.lastName === '' || newMember.sports.length === 0 ? 'button button__save button__save--disabled' : 'button button__save'}}"
+            [disabled]="newMember.firstName === '' || newMember.lastName === '' || newMember.sports.length === 0"
+            (click)="handleMemberAdd()"
+          >
+            Save
+          </button>
+
+          <!--CANCEL-->
+          <button
+            class='button button__cancel'
+            (click)="modalOpen = false"
+          >
+            Cancel
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
