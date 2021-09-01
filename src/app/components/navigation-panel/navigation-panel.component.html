@@ -58,7 +58,7 @@
     <li
       class="menu__item"
       *ngFor="let item of menuItems; let index = index"
-      (click)="active = index"
+      (click)="active = index; handleRouteChange()"
     >
       <!--ICON-->
       <i
